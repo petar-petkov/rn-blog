@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet, Text, View, FlatList, Button, TouchableOpacity } from 'react-native';
 import { Context as BlogContext } from '../context/BlogContext';
 import { EvilIcons } from '@expo/vector-icons'; 
+import { AntDesign } from '@expo/vector-icons'; 
 
 const IndexScreen = ({ navigation }) => {
   const { state, addBlogPost, deleteBlogPost } = useContext(BlogContext);
@@ -32,7 +33,19 @@ const IndexScreen = ({ navigation }) => {
       />
     </View>
   );
-}
+};
+
+IndexScreen.navigationOptions = ({ navigation }) => {
+  return {
+    headerRight: () => (
+      <TouchableOpacity onPress={() => navigation.navigate('Create')}>
+        <View style={styles.iconContainer}>
+          <AntDesign name="plus" style={styles.createIcon} />
+        </View>
+      </TouchableOpacity>
+    ),
+  };
+};
 
 const styles = StyleSheet.create({
   row: {
@@ -49,6 +62,13 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 35,
     color: 'red'
+  },
+  createIcon: {
+    fontSize: 30,
+    color: 'black',
+  },
+  iconContainer: {
+    marginRight: 10
   }
 })
 
