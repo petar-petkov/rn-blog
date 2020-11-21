@@ -49,12 +49,14 @@ const getBlogPosts = dispatch => {
 
 
 const addBlogPost = (dispatch) => {
-  return (title, content, callback) => {
-    dispatch({
-      type: 'add_blog_post',
-      // Avoiding shorthand just for readability
-      payload: {title: title, content: content}
-    });
+  return async (title, content, callback) => {
+    await backendApi.post('/posts/', { title: title, content: content })
+
+    //dispatch({
+    //  type: 'add_blog_post',
+    //  // Avoiding shorthand just for readability
+    //  payload: {title: title, content: content}
+    //});
 
     // Check if we even have a callback
     if (callback) {

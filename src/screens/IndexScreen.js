@@ -1,11 +1,28 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, Button, TouchableOpacity } from 'react-native';
 import { Context as BlogContext } from '../context/BlogContext';
 import { EvilIcons } from '@expo/vector-icons'; 
 import { AntDesign } from '@expo/vector-icons'; 
 
 const IndexScreen = ({ navigation }) => {
-  const { state, addBlogPost, deleteBlogPost } = useContext(BlogContext);
+  const { state, getBlogPosts, deleteBlogPost } = useContext(BlogContext);
+
+  useEffect(() => {
+    getBlogPosts();
+
+    // We want to run the get request each time we visit the index
+    const listener = navigation.addListener('didFocus', () => {
+      getBlogPosts();
+    });
+
+    // If this function ever executes it means that Index Screen
+    // was removed entirely from the stack, so we need to
+    // delete the listener to avoid memory leaks
+    return () => {
+      listener.remove();
+    };
+    // this array is here to signal we want to run our function only once
+  }, []);
 
   return (
     <View style={styles.container}>
