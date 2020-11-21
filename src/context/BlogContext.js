@@ -1,8 +1,10 @@
-import { call } from 'react-native-reanimated';
 import createDataContext from './createDataContext';
+import backendApi from '../api/backendApi';
 
 const blogReducer = (state, action) => {
   switch (action.type) {
+    case 'get_blog_posts':
+      return action.payload;
     case 'add_blog_post':
       return [
         ...state,
@@ -35,6 +37,16 @@ const blogReducer = (state, action) => {
       return state;
   }
 };
+
+const getBlogPosts = dispatch => {
+  return async () => {
+    const response = await backendApi.get('/posts');
+    // response.data === [{post1}, {post2}, {}]
+
+    dispatch({ type: 'get_blog_posts', payload: response.data });
+  };
+}
+
 
 const addBlogPost = (dispatch) => {
   return (title, content, callback) => {
@@ -79,7 +91,7 @@ export const { Context, Provider } = createDataContext(
   // Reducer...
   blogReducer,
   // Actions
-  { addBlogPost, deleteBlogPost, editBlogPost },
+  { getBlogPosts, addBlogPost, deleteBlogPost, editBlogPost },
   // Initial state value
-  [{ title: 'Test Post', content: 'Test Content', id: 1 }]
+  []
 );
