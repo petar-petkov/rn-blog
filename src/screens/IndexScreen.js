@@ -9,12 +9,6 @@ const IndexScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Button
-        title="Add Post" 
-        // This can be shortened to just {addBlogPost}
-        // it's like that for readability 
-        onPress={() => addBlogPost()}
-      />
       <FlatList 
         data={state}
         keyExtractor={(blogPost) => blogPost.title}

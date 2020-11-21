@@ -26,8 +26,11 @@ const CreateScreen = ({ navigation }) => {
       <Button
         title="Create Post"
         onPress={() => {
-          addBlogPost(title, content);
-          navigation.navigate('Index');
+          // The 3rd argument is a callback function to context
+          addBlogPost(title, content, () => {
+            navigation.navigate('Index');
+          });
+
         }}
 
       />
