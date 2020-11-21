@@ -5,15 +5,6 @@ const blogReducer = (state, action) => {
   switch (action.type) {
     case 'get_blog_posts':
       return action.payload;
-    case 'add_blog_post':
-      return [
-        ...state,
-        { 
-          id: Math.floor(Math.random() * 999999),
-          title: action.payload.title,
-          content: action.payload.content
-        }
-      ];
     case 'delete_blog_post':
       return state.filter(
         (blogPost) => blogPost.id !== action.payload
@@ -47,16 +38,9 @@ const getBlogPosts = dispatch => {
   };
 }
 
-
 const addBlogPost = (dispatch) => {
   return async (title, content, callback) => {
     await backendApi.post('/posts/', { title: title, content: content })
-
-    //dispatch({
-    //  type: 'add_blog_post',
-    //  // Avoiding shorthand just for readability
-    //  payload: {title: title, content: content}
-    //});
 
     // Check if we even have a callback
     if (callback) {
@@ -67,14 +51,18 @@ const addBlogPost = (dispatch) => {
 };
 
 const deleteBlogPost = (dispatch) => {
-  return (id) => {
-    dispatch({ type: 'delete_blog_post', payload: id })
+  return async (id) => {
+    await backendApi.delete(`/post/${id}/`);
+    dispatch({ type: 'delete_blog_post', payload: id });
   };
 
 }
 
 const editBlogPost = (dispatch) => {
-  return (id, title, content, callback) => {
+  return async (id, title, content, callback) => {
+
+    await backendApi.put(`/post/${id}/`, { title: title, content: content });
+
     dispatch({
       type: 'edit_blog_post',
       // Avoiding shorthand just for readability
